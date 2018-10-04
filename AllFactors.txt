@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PerfectNumbersForm
+{
+    public partial class AllFactors : Form
+    {
+        public AllFactors()
+        {
+            InitializeComponent();
+        }
+
+        private void buttonDisplayFactors_Click(object sender, EventArgs e)
+        {
+            int enterNum,
+                possDivis;
+            int displayOnLine = 0;
+
+            if (int.TryParse(textBoxFactors.Text, out enterNum))
+            {//If they give us a whole number...
+                labelFactors.Text = String.Format("{0} is divisible by", enterNum);
+
+                if (enterNum < 0)
+                {
+                    labelFactors.Text += String.Format("\n{0}", -1);
+                    ++displayOnLine;
+                    enterNum = enterNum * -1;
+                }
+
+                possDivis = 1;
+
+                while ((possDivis < enterNum) && (possDivis < ((enterNum / 2) + 1))) //End if just over halfway
+                {//Search through our numbers for divisible items
+                 //Write("{0} ", possDivis);//Bug checking
+                    if (enterNum % possDivis == 0)
+                    {//When we find something divisible, add this string
+                        if (displayOnLine > 0)
+                        {//After the first number displayed
+                            labelFactors.Text += String.Format(", {0}", possDivis);
+                            ++displayOnLine;
+                        }
+                        else
+                        {//The first number displayed
+                            labelFactors.Text += String.Format("\n{0}", possDivis);
+                            ++displayOnLine;
+                        }//end else
+                        if (displayOnLine > 9)
+                            displayOnLine = 0;
+                    } //End check for divisible
+                    ++possDivis;
+                } //End while for possDivis
+            }//end if
+            else //If the text is not able to convert
+                labelFactors.Text = "Please enter an integer!";
+            labelFactors.Visible = true;
+        }
+    }
+}

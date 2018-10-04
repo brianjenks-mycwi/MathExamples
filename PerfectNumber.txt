@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PerfectNumbersForm
+{
+    public partial class DPerfectNum : Form
+    {
+        public DPerfectNum()
+        {
+            InitializeComponent();
+        }
+
+        private void buttonPerfectNums_Click(object sender, EventArgs e)
+        {
+            int max; //Find our perfect numbers below this number
+            int queryNum = 1,
+                sumDivis,
+                possDivis;
+            bool perfNumFound = false; //Did we find a number?
+
+            if (!int.TryParse(textBoxPerfectNums.Text, out max))
+            {//If the textbox isn't an integer, display an error message.
+                labelPerfectNums.Text = "Please enter an integer to process!";
+            }
+
+            else if (max <= 0)
+            {//RUDE! They entered a number below 0.
+                labelPerfectNums.Text = "Please enter a number greater than 0 to process.";
+            }
+
+            else //If the textbox contains an integer
+            {
+                labelPerfectNums.Text = ""; //Clear our text
+                while (queryNum <= max)
+                {//Go through each number until we hit the max
+                    sumDivis = 0;//Reset our divisible sums
+                    possDivis = 1; //Reset our possible divisible ones
+                    while (possDivis < queryNum)
+                    {//Until we hit the number in question
+                        if (queryNum % possDivis == 0)
+                        {//If the number in question can divide by possDivis
+                            sumDivis += possDivis; //Add the number to our total
+                        } //End check for divisible
+                        ++possDivis; //Go to the next number
+                    } //End while for possDivis
+
+                    if (sumDivis == queryNum)
+                    {//If we have a perfect number
+                        labelPerfectNums.Text += String.Format("{0} is a perfect number.\n", queryNum);
+                        perfNumFound = true;
+                    } //End if for perfect number check
+                    ++queryNum;
+                } //End while for queryNum
+                if (!perfNumFound)
+                {//If we looked for numbers below 6...
+                    labelPerfectNums.Text = ("No perfect numbers found below" + textBoxPerfectNums.Text);
+                }
+            }
+            
+            labelPerfectNums.Visible = true; //After everything is processed, and the label has text
+        }
+    }
+}

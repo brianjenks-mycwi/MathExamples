@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace PerfectNumbersForm
+{
+    public partial class PrimeFactors : Form
+    {
+        public PrimeFactors()
+        {
+            InitializeComponent();
+        }
+
+        private void buttonDisplayPrimes_Click(object sender, EventArgs e)
+        {
+            int enterNum, num, y;
+            bool keepLooking = true;
+            int[] factors = new int[10];
+
+            if (int.TryParse(textBoxPrimes.Text, out enterNum))
+            {
+
+                num = enterNum;  //We still want enterNum so that we can show our original number at the end
+                y = 0; //This will be how we move through factors[]
+                if (num < 0)
+                {//If they gave us a negative number, we'll just add it to our factor list
+                    factors[y] = -1; //Add the negative to the factor list
+                    ++y; //Move up in the factor list
+                    num = num * -1; //Change our number to positive
+                }
+
+                labelPrimeFactors.Text = "";
+                while (num != 1)
+                { //We're done once num becomes 1.
+                    for (int x = 2; (keepLooking) && (x <= num); x++) //We should never see the second boolean be false except at the end of this method
+                    {//Run through our integers to find whether an item is divisible
+                        if (num % x == 0)
+                        { //If our number is divisible
+                            factors[y] = x; //Add the number to factors[], so we can display it
+                            ++y; //Go to the next location in factors[]
+                            num = num / x; //Divide by the number, so we can find the next factor
+                            keepLooking = false; //Break out of the loop
+                        }//end if our numbers are divisible
+                        if (y == 10)
+                        {//If we can't store more factors
+                            if (num != 1)
+                            {//We don't want to say this if num is 1.
+                                labelPrimeFactors.Text = String.Format("Amount of prime factors full!\n" +
+                                    "Please record the numbers below\n" +
+                                    "and reenter {0} as your new number to factor.\n", num);
+                            }
+                            num = 1; //Break out of the for AND while loop
+                        }//end if we can't store more factors
+                    }//end for
+                    keepLooking = true; //Get the loop ready to run again
+                }//end while
+
+                labelPrimeFactors.Text += String.Format("The prime factors of {0} are: ", enterNum); //Display our information from the item
+                for (int x = 0; x < 10; ++x)
+                {
+                    if (factors[x] != 0)//Only if our numbers are not 0!
+                        labelPrimeFactors.Text += String.Format("\n{0}", factors[x]);//Show our factors
+                }
+            }//end if
+            else
+                labelPrimeFactors.Text = "Please enter an integer!";
+                labelPrimeFactors.Visible = true;
+        }//end ClickButton
+    }
+}
